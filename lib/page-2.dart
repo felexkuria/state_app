@@ -4,8 +4,8 @@ import 'stateful_widget.dart';
 
 class PageTwoState extends StatefulWidget {
   // const PageTwoState({ Key? key }) : super(key: key);
-  int counter;
-  final Function(int) callBack;
+  late int counter;
+  final Function callBack;
   PageTwoState({
     Key? key,
     required this.counter,
@@ -16,13 +16,6 @@ class PageTwoState extends StatefulWidget {
 }
 
 class _PageTwoStateState extends State<PageTwoState> {
-  void _incrementCounter() {
-    setState(() {
-      widget.counter++;
-    });
-    widget.callBack(widget.counter);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,12 +55,17 @@ class _PageTwoStateState extends State<PageTwoState> {
               '${widget.counter}',
               style: Theme.of(context).textTheme.headline4,
             ),
-            ExampleStatefulPage(),
+            // ExampleStatefulPage(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          widget.callBack.call();
+          setState(() {
+            widget.counter++;
+          });
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

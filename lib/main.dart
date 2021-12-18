@@ -52,23 +52,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 1;
-  void _navigate() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => PageTwoState(
-                counter: _counter,
-                callBack: (int value) {
-                  setState(() {
-                    _counter = value;
-                  });
-                },
-              )),
-    );
-    // if (value != null) {
-    //   setState(() {
-    //     _counter = value;
-    //   });
-    // }
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+    // widget.callBack(widget.counter);
   }
 
   @override
@@ -112,12 +100,41 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            ExampleStatefulPage(),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PageTwoState(
+                      counter: _counter,
+                      callBack: _incrementCounter,
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                "Go to  A",
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ExampleStatefulPage(
+                          callback: _incrementCounter,
+                          counter: _counter,
+                        )));
+              },
+              child: Text(
+                "Go to  B",
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            )
+            //ExampleStatefulPage(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _navigate,
+        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
