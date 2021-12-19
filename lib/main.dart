@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:state_app/model/favourite.dart';
 import 'package:state_app/page-2.dart';
 
 import 'stateful_widget.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => Favourite(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -100,6 +103,12 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Consumer<Favourite>(
+              builder: (BuildContext context, favourite, Widget? child) => Text(
+                '${favourite.isToggled}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -112,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text(
-                "Go to  A",
+                "${context.watch<Favourite>().like}",
                 style: Theme.of(context).textTheme.headline4,
               ),
             ),
@@ -134,9 +143,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          context.read<Favourite>().liked();
+        },
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: context.read<Favourite>().isToggled == true
+            ? const Icon(Icons.favorite)
+            : const Icon(Icons.favorite_border_outlined),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
