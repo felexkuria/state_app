@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:state_app/model/favourite.dart';
+import 'package:state_app/my_iherited_widget.dart';
 import 'package:state_app/page-2.dart';
 
 import 'stateful_widget.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => Favourite(), child: const MyApp()));
+  runApp(const MyApp());
+  // runApp(ChangeNotifierProvider(
+  //     create: (context) => Favourite(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,21 +18,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    //final counter = MyiheritedWidget.of(context);
+    return MyiheritedWidget(
+      key: key,
+      counter: 5,
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -64,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final counter = MyiheritedWidget.of(context);
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -100,15 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              "$counter",
               style: Theme.of(context).textTheme.headline4,
             ),
-            Consumer<Favourite>(
-              builder: (BuildContext context, favourite, Widget? child) => Text(
-                '${favourite.isToggled}',
-                style: Theme.of(context).textTheme.headline4,
-              ),
+
+            Text(
+              '0',
+              style: Theme.of(context).textTheme.headline4,
             ),
+
             TextButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -121,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Text(
-                "${context.watch<Favourite>().like}",
+                "0",
                 style: Theme.of(context).textTheme.headline4,
               ),
             ),
@@ -144,12 +152,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<Favourite>().liked();
+          //context.read<Favourite>().liked();
         },
         tooltip: 'Increment',
-        child: context.read<Favourite>().isToggled == true
-            ? const Icon(Icons.favorite)
-            : const Icon(Icons.favorite_border_outlined),
+        child: const Icon(Icons.favorite_border_outlined),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
