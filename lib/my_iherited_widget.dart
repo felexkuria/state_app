@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
 
-class MyCounterInheritedWidgetSate extends StatefulWidget {
-  const MyCounterInheritedWidgetSate({Key? key}) : super(key: key);
+class MyCounterInheritedWidget extends StatefulWidget {
+  //const MyCounterInheritedWidgetSate({Key? key}) : super(key: key);
+  final Widget child;
+
+  const MyCounterInheritedWidget({Key? key, required this.child})
+      : super(key: key);
+  static _MyCounterInheritedWidgetState? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<MyInheritedWidget>()
+        ?.data;
+  }
 
   @override
-  _MyCounterInheritedWidgetSateState createState() =>
-      _MyCounterInheritedWidgetSateState();
+  _MyCounterInheritedWidgetState createState() =>
+      _MyCounterInheritedWidgetState();
 }
 
-class _MyCounterInheritedWidgetSateState
-    extends State<MyCounterInheritedWidgetSate> {
+class _MyCounterInheritedWidgetState extends State<MyCounterInheritedWidget> {
+  int _counter = 0;
+  int get counter => _counter;
+
+  void increment() {
+    setState(() {
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MyInheritedWidget(child: widget.child, counter: counter, data: this);
   }
 }
 
-class MyiheritedWidget extends InheritedWidget {
+class MyInheritedWidget extends InheritedWidget {
   final int counter;
-  const MyiheritedWidget({
-    required Key? key,
+  final _MyCounterInheritedWidgetState data;
+  const MyInheritedWidget({
+    Key? key,
     required Widget child,
     required this.counter,
+    required this.data,
   }) : super(key: key, child: child);
 
   //final Widget child;
 
-  static int of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<MyiheritedWidget>()!
-        .counter;
-  }
-
   @override
-  bool updateShouldNotify(MyiheritedWidget oldWidget) {
+  bool updateShouldNotify(MyInheritedWidget oldWidget) {
     return oldWidget.counter != counter;
   }
 }
